@@ -1,0 +1,34 @@
+---
+- name: Configure and deploy the web application
+  hosts: webservers
+  connection: local
+  gather_facts: true
+
+  vars:
+    app_directory: /tmp/ansible-webapp
+
+  tasks:
+    - name: Create application directory
+      ansible.builtin.file:
+        path: "{{ app_directory }}"
+        state: directory
+        mode: "0755"
+
+    - name: Copy website to application directory
+      ansible.builtin.copy:
+        src: files/index.html
+        dest: "{{ app_directory }}/index.html"
+        mode: "0644"
+
+    - name: Verify website file exists
+      ansible.builtin.stat:
+        path: "{{ app_directory }}/index.html"
+      register: website_file
+
+    - name: Confirm deployment succeeded
+      ansible.builtin.assert:
+        that:
+          - website_file.stat.exists
+          - website_file.stat.isreg
+          - website_file.stat.size > 0
+        success_msg: "Website deployed successfully!"

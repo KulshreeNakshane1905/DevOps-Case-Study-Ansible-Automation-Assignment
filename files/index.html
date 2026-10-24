@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduTrack | Student Learning Dashboard</title>
+<style>
+:root{--navy:#14213d;--blue:#4361ee;--cyan:#4cc9f0;--bg:#f5f7fb;--card:#fff;--text:#1f2937;--muted:#64748b;--line:#e5eaf2;--green:#15803d;--red:#b91c1c;--amber:#b45309}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}
+header{background:linear-gradient(120deg,var(--navy),#263f7a);color:#fff;padding:25px max(20px,calc((100% - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:45px;height:45px;border-radius:13px;background:#fff;color:var(--blue);display:grid;place-items:center;font-weight:900;font-size:22px}.brand h1{font-size:23px;margin:0}.brand p{margin:2px 0 0;color:#dbeafe;font-size:13px}.header-note{font-size:13px;color:#dbeafe}
+main{max-width:1180px;margin:28px auto;padding:0 20px}.welcome{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}.welcome h2{margin:0;font-size:26px;color:var(--navy)}.welcome p{margin:5px 0 0;color:var(--muted)}.date-chip{background:#e8edff;color:#2e46b8;padding:9px 13px;border-radius:999px;font-weight:700;font-size:13px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:20px}.stat{background:var(--card);padding:18px;border:1px solid var(--line);border-radius:16px;box-shadow:0 5px 18px #14213d08}.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}.stat-icon{width:35px;height:35px;border-radius:11px;background:#edf1ff;color:var(--blue);display:grid;place-items:center;font-size:18px}.stat strong{display:block;font-size:30px;margin-top:8px;color:var(--navy)}.stat small{color:var(--muted)}
+.layout{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(290px,.8fr);gap:18px;align-items:start}.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 5px 18px #14213d08;margin-bottom:18px}.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}.panel h3{margin:0;color:var(--navy);font-size:18px}.muted{color:var(--muted);font-size:13px}
+form .fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}label{font-size:12px;color:#475569;font-weight:750}input,select,textarea{width:100%;padding:11px 12px;border:1px solid #d7deea;border-radius:9px;background:#fff;color:var(--text);font:inherit;outline:none}input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #4361ee18}button{font:inherit;cursor:pointer;border:0;border-radius:9px;padding:10px 13px;font-weight:750;transition:.15s}button:focus-visible{outline:3px solid #4cc9f0;outline-offset:2px}.primary{background:var(--blue);color:#fff}.primary:hover{background:#3049c9}.secondary{background:#edf1ff;color:#3049c9}.ghost{background:#f1f5f9;color:#475569}.danger{background:#fff0f0;color:var(--red)}.form-actions{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}.toolbar input{flex:1;min-width:150px}.toolbar select{width:auto;min-width:125px}
+.task-list{display:flex;flex-direction:column;gap:10px}.task{border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:start}.task.done{background:#f8fafc}.task-check{width:19px;height:19px;margin-top:3px;accent-color:var(--blue)}.task-title{font-weight:800;color:var(--navy);overflow-wrap:anywhere}.task.done .task-title{text-decoration:line-through;color:#64748b}.task-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.tag{font-size:11px;padding:4px 8px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:750}.tag.high{background:#fee2e2;color:#991b1b}.tag.medium{background:#fef3c7;color:#92400e}.tag.low{background:#dcfce7;color:#166534}.tag.overdue{background:#fee2e2;color:#991b1b}.task-due{font-size:12px;color:var(--muted);margin-top:7px}.task-actions{display:flex;gap:5px}.task-actions button{padding:7px 9px;font-size:12px}.empty{text-align:center;padding:28px 12px;color:var(--muted)}.empty strong{display:block;color:var(--navy);font-size:15px;margin-bottom:4px}
+.progress-track{height:10px;background:#e9eef8;border-radius:999px;overflow:hidden;margin:12px 0 8px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:999px;transition:width .2s}.subject-row{display:flex;justify-content:space-between;gap:12px;margin:13px 0;font-size:13px}.subject-row strong{color:var(--navy)}.subject-bar{height:6px;background:#eef2f7;border-radius:99px;overflow:hidden;margin-top:5px}.subject-bar span{display:block;height:100%;background:var(--blue);border-radius:99px}.tip{background:#eef7ff;border:1px solid #dbeafe;border-radius:12px;padding:14px;color:#1e40af;font-size:13px}.tip strong{display:block;margin-bottom:4px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:24px}
+.toast{position:fixed;bottom:20px;right:20px;background:#14213d;color:#fff;padding:12px 16px;border-radius:10px;box-shadow:0 8px 25px #0002;max-width:calc(100vw - 40px);z-index:5}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){main{padding:0 12px;margin:18px auto}.stats{gap:9px}.stat{padding:13px}.stat strong{font-size:25px}.panel{padding:15px}.task{grid-template-columns:auto minmax(0,1fr)}.task-actions{grid-column:2}.fields{grid-template-columns:1fr!important}.field.full{grid-column:auto}.welcome h2{font-size:23px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">E</div><div><h1>EduTrack</h1><p>Student Learning & Assignment Planner</p></div></div>
+  <div class="header-note">Learning smarter, one task at a time</div>
+</header>
+<main>
+  <section class="welcome">
+    <div><h2>Your learning dashboard</h2><p>Plan coursework, track deadlines, and celebrate progress.</p></div>
+    <div class="date-chip" id="todayLabel">Today</div>
+  </section>
+  <section class="stats" aria-label="Task summary">
+    <article class="stat"><div class="stat-top">All tasks <span class="stat-icon">▤</span></div><strong id="totalCount">0</strong><small>Across all subjects</small></article>
+    <article class="stat"><div class="stat-top">In progress <span class="stat-icon">◷</span></div><strong id="pendingCount">0</strong><small>Still to complete</small></article>
+    <article class="stat"><div class="stat-top">Completed <span class="stat-icon">✓</span></div><strong id="completedCount">0</strong><small>Good work!</small></article>
+    <article class="stat"><div class="stat-top">Overdue <span class="stat-icon">!</span></div><strong id="overdueCount">0</strong><small>Past due and pending</small></article>
+  </section>
+  <div class="layout">
+    <section>
+      <div class="panel" id="editorPanel">
+        <div class="panel-heading"><h3 id="formHeading">＋ Add a learning task</h3><span class="muted">Task planner</span></div>
+        <form id="taskForm">
+          <div class="fields">
+            <div class="field full"><label for="taskTitle">TASK TITLE *</label><input id="taskTitle" maxlength="120" placeholder="e.g. Complete Ansible lab report" required></div>
+            <div class="field"><label for="subject">SUBJECT</label><select id="subject"><option>DevOps</option><option>Computer Networks</option><option>Database Systems</option><option>Data Structures</option><option>Operating Systems</option><option>Project Work</option><option>Other</option></select></div>
+            <div class="field"><label for="priority">PRIORITY</label><select id="priority"><option value="High">High</option><option value="Medium" selected>Medium</option><option value="Low">Low</option></select></div>
+            <div class="field"><label for="dueDate">DUE DATE</label><input id="dueDate" type="date"></div>
+            <div class="field"><label for="taskType">TASK TYPE</label><select id="taskType"><option>Assignment</option><option>Study</option><option>Exam Preparation</option><option>Project</option><option>Other</option></select></div>
+          </div>
+          <div class="form-actions"><button class="primary" id="saveButton" type="submit">Add Task</button><button class="ghost" id="cancelEdit" type="button" hidden>Cancel edit</button></div>
+        </form>
+      </div>
+      <div class="panel">
+        <div class="panel-heading"><h3>Your tasks</h3><span class="muted" id="visibleCount">0 tasks</span></div>
+        <div class="toolbar">
+          <input id="searchInput" type="search" placeholder="Search tasks or subjects..." aria-label="Search tasks">
+          <select id="statusFilter" aria-label="Filter by status"><option value="all">All statuses</option><option value="pending">Pending</option><option value="completed">Completed</option><option value="overdue">Overdue</option></select>
+          <select id="sortBy" aria-label="Sort tasks"><option value="due">Sort: Due date</option><option value="priority">Sort: Priority</option><option value="newest">Sort: Newest</option></select>
+        </div>
+        <div id="taskList" class="task-list"></div>
+        <div id="emptyState" class="empty" hidden><strong>No matching tasks</strong>Try another search or add a new task.</div>
+      </div>
+    </section>
+    <aside>
+      <div class="panel">
+        <div class="panel-heading"><h3>Weekly progress</h3></div>
+        <div style="display:flex;justify-content:space-between;align-items:end"><div><strong id="progressPercent" style="font-size:32px;color:#14213d">0%</strong><div class="muted">Tasks completed</div></div><span id="progressFraction" class="muted">0 of 0</span></div>
+        <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+        <div class="muted">Small steps add up. Keep going!</div>
+      </div>
+      <div class="panel">
+        <div class="panel-heading"><h3>Subject breakdown</h3></div>
+        <div id="subjectBreakdown"></div>
+      </div>
+      <div class="tip"><strong>Study tip</strong>Break large assignments into smaller tasks, set realistic due dates, and complete the highest-priority work first.</div>
+      <div class="panel" style="margin-top:18px">
+        <div class="panel-heading"><h3>Data management</h3></div>
+        <p class="muted">Your tasks are saved in this browser on this device.</p>
+        <div class="form-actions"><button class="secondary" id="exportButton" type="button">Export JSON</button><button class="danger" id="clearCompleted" type="button">Clear completed</button></div>
+        <p class="muted" style="margin-bottom:0">Export a backup before clearing browser data.</p>
+      </div>
+    </aside>
+  </div>
+</main>
+<footer>EduTrack • Front-end demonstration application • Deployment automated with Ansible</footer>
+<div id="toast" class="toast" role="status" hidden></div>
+<script>
+(() => {
+  const STORAGE_KEY = "edutrack.tasks.v1";
+  const $ = id => document.getElementById(id);
+  const form = $("taskForm");
+  let editingId = null;
+  let tasks = loadTasks();
+  let toastTimer;
+
+  function loadTasks() {
+    try {
+      const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+      if (Array.isArray(value)) return value;
+    } catch (e) {}
+    const initial = [
+      {id: makeId(), title:"Complete Ansible lab report", subject:"DevOps", priority:"High", dueDate:"", type:"Assignment", completed:false, createdAt:Date.now()-3000},
+      {id: makeId(), title:"Revise TCP/IP concepts", subject:"Computer Networks", priority:"Medium", dueDate:"", type:"Study", completed:true, createdAt:Date.now()-2000},
+      {id: makeId(), title:"Practice SQL queries", subject:"Database Systems", priority:"Low", dueDate:"", type:"Study", completed:false, createdAt:Date.now()-1000}
+    ];
+    return initial;
+  }
+  function makeId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+  function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)); } catch(e) { showToast("Could not save in browser storage."); } }
+  function isOverdue(t) { return !t.completed && t.dueDate && t.dueDate < localDate(); }
+  function localDate() { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`; }
+  function formatDate(s) { if(!s) return "No due date"; const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d).toLocaleDateString(undefined,{day:"numeric",month:"short",year:"numeric"}); }
+  function escapeText(s) { return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+  function showToast(msg) { const t=$("toast"); t.textContent=msg; t.hidden=false; clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.hidden=true,2600); }
+  function resetForm() { editingId=null; form.reset(); $("priority").value="Medium"; $("formHeading").textContent="＋ Add a learning task"; $("saveButton").textContent="Add Task"; $("cancelEdit").hidden=true; }
+  function render() {
+    const completed=tasks.filter(t=>t.completed).length, overdue=tasks.filter(isOverdue).length, pending=tasks.length-completed;
+    $("totalCount").textContent=tasks.length; $("pendingCount").textContent=pending; $("completedCount").textContent=completed; $("overdueCount").textContent=overdue;
+    const pct=tasks.length?Math.round(completed/tasks.length*100):0;
+    $("progressPercent").textContent=pct+"%"; $("progressFraction").textContent=`${completed} of ${tasks.length}`; $("progressFill").style.width=pct+"%";
+    $("todayLabel").textContent=new Date().toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short",year:"numeric"});
+    const query=$("searchInput").value.trim().toLowerCase(), filter=$("statusFilter").value, sort=$("sortBy").value;
+    let shown=tasks.filter(t=>(t.title+" "+t.subject+" "+t.type).toLowerCase().includes(query));
+    shown=shown.filter(t=>filter==="all" ? true : filter==="completed" ? t.completed : filter==="overdue" ? isOverdue(t) : !t.completed);
+    const rank={High:0,Medium:1,Low:2};
+    shown.sort((a,b)=>sort==="priority" ? rank[a.priority]-rank[b.priority] : sort==="newest" ? b.createdAt-a.createdAt : (a.dueDate||"9999").localeCompare(b.dueDate||"9999"));
+    $("visibleCount").textContent=`${shown.length} task${shown.length===1?"":"s"}`;
+    $("taskList").innerHTML=shown.map(t=>`
+      <article class="task ${t.completed?"done":""}">
+        <input class="task-check" type="checkbox" data-action="toggle" data-id="${escapeText(t.id)}" aria-label="Complete ${escapeText(t.title)}" ${t.completed?"checked":""}>
+        <div>
+          <div class="task-title">${escapeText(t.title)}</div>
+          <div class="task-meta"><span class="tag">${escapeText(t.subject)}</span><span class="tag ${t.priority.toLowerCase()}">${escapeText(t.priority)} priority</span><span class="tag">${escapeText(t.type)}</span>${isOverdue(t)?'<span class="tag overdue">Overdue</span>':""}</div>
+          <div class="task-due">Due: ${escapeText(formatDate(t.dueDate))}</div>
+        </div>
+        <div class="task-actions"><button class="secondary" data-action="edit" data-id="${escapeText(t.id)}">Edit</button><button class="danger" data-action="delete" data-id="${escapeText(t.id)}">Delete</button></div>
+      </article>`).join("");
+    $("emptyState").hidden=shown.length!==0;
+    const counts={}; tasks.forEach(t=>{counts[t.subject]=(counts[t.subject]||0)+1;});
+    const subjects=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+    $("subjectBreakdown").innerHTML=subjects.length?subjects.map(([name,count])=>`<div class="subject-row"><div style="flex:1"><div style="display:flex;justify-content:space-between;gap:8px"><span>${escapeText(name)}</span><strong>${count}</strong></div><div class="subject-bar"><span style="width:${Math.round(count/tasks.length*100)}%"></span></div></div></div>`).join(""):'<p class="muted">Add tasks to see subject breakdown.</p>';
+  }
+  form.addEventListener("submit",e=>{
+    e.preventDefault();
+    const title=$("taskTitle").value.trim(); if(!title){showToast("Please enter a task title.");return;}
+    const data={title,subject:$("subject").value,priority:$("priority").value,dueDate:$("dueDate").value,type:$("taskType").value};
+    if(editingId){tasks=tasks.map(t=>t.id===editingId?{...t,...data}:t);showToast("Task updated.");}
+    else{tasks.push({id:makeId(),...data,completed:false,createdAt:Date.now()});showToast("Task added.");}
+    save();resetForm();render();
+  });
+  $("cancelEdit").addEventListener("click",resetForm);
+  $("taskList").addEventListener("change",e=>{
+    if(e.target.dataset.action!=="toggle")return;
+    const id=e.target.dataset.id; tasks=tasks.map(t=>t.id===id?{...t,completed:e.target.checked}:t);save();render();showToast(e.target.checked?"Task completed!":"Task marked pending.");
+  });
+  $("taskList").addEventListener("click",e=>{
+    const b=e.target.closest("button[data-action]");if(!b)return;
+    const t=tasks.find(x=>x.id===b.dataset.id);if(!t)return;
+    if(b.dataset.action==="delete"){if(confirm(`Delete "${t.title}"?`)){tasks=tasks.filter(x=>x.id!==t.id);if(editingId===t.id)resetForm();save();render();showToast("Task deleted.");}}
+    if(b.dataset.action==="edit"){editingId=t.id;$("taskTitle").value=t.title;$("subject").value=t.subject;$("priority").value=t.priority;$("dueDate").value=t.dueDate||"";$("taskType").value=t.type;$("formHeading").textContent="Edit learning task";$("saveButton").textContent="Save Changes";$("cancelEdit").hidden=false;$("editorPanel").scrollIntoView({behavior:"smooth",block:"start"});$("taskTitle").focus();}
+  });
+  ["searchInput","statusFilter","sortBy"].forEach(id=>$(id).addEventListener(id==="searchInput"?"input":"change",render));
+  $("clearCompleted").addEventListener("click",()=>{const n=tasks.filter(t=>t.completed).length;if(!n){showToast("No completed tasks to clear.");return;}if(confirm(`Remove ${n} completed task(s)?`)){tasks=tasks.filter(t=>!t.completed);save();render();showToast("Completed tasks cleared.");}});
+  $("exportButton").addEventListener("click",()=>{const blob=new Blob([JSON.stringify({application:"EduTrack",exportedAt:new Date().toISOString(),tasks},null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="edutrack-backup.json";a.click();URL.revokeObjectURL(url);showToast("Task backup exported.");});
+  save();render();
+})();
+</script>
+</body>
+</html>
